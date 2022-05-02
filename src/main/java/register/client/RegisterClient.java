@@ -64,6 +64,7 @@ public class RegisterClient {
             }
             if (finishedRegister) {
                 HeartbeatRequest heartbeatRequest = new HeartbeatRequest();
+                heartbeatRequest.setServiceName(SERVICE_NAME);
                 heartbeatRequest.setServiceInstanceId(serviceInstanceId);
                 HeartbeatResponse heartbeatResponse = null;
                 while (true) {
