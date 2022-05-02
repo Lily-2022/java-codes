@@ -9,15 +9,21 @@ import java.util.Map;
 public class ServiceAliveMonitor {
 
     private static final Long CHECK_ALIVE_INTERVAL = 60 * 1000L;
-    private Daemon daemon = new Daemon();
+    private final Daemon daemon;
+
+    public ServiceAliveMonitor() {
+        this.daemon = new Daemon();
+        //只有设置来这个标识位才是一个daemon线程
+        daemon.setDaemon(true);
+    }
 
     public void start() {
         daemon.start();
     }
 
-    private class Daemon extends Thread {
+    private static class Daemon extends Thread {
 
-        private Registry registry = Registry.getInstance();
+        private final Registry registry = Registry.getInstance();
 
         public void run() {
             Map<String, Map<String, ServiceInstance>> registryMap = null;
