@@ -1,6 +1,6 @@
 package register.client;
 
-public class RegisterRequest {
+public class HeartbeatRequest {
     public String getServiceName() {
         return serviceName;
     }
@@ -42,19 +42,10 @@ public class RegisterRequest {
     }
 
     private String serviceName;
+    private String serviceInstanceId;
     private String ip;
     private String hostName;
     private int port;
-    private String serviceInstanceId;
 
-    @Override
-    public String toString() {
-        return "RegisterRequest{" +
-                "serviceName='" + serviceName + '\'' +
-                ", ip='" + ip + '\'' +
-                ", hostName='" + hostName + '\'' +
-                ", port=" + port +
-                ", serviceInstanceId='" + serviceInstanceId + '\'' +
-                '}';
-    }
+
 }
