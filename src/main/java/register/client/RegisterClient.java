@@ -23,13 +23,16 @@ public class RegisterClient {
 
     private final HeartbeatWorker heartbeatWorker;
 
-    private boolean isRunning;
+    private ClientCachedServiceRegistry cachedServiceRegistry;
+
+    private volatile boolean isRunning;
 
     public RegisterClient() {
         this.httpSender = new HttpSender();
         this.serviceInstanceId = UUID.randomUUID().toString().replace("-", "");
         this.heartbeatWorker = new HeartbeatWorker();
         this.isRunning = true;
+        this.cachedServiceRegistry = new ClientCachedServiceRegistry(this, httpSender);
     }
 
     public void start() {
@@ -42,6 +45,7 @@ public class RegisterClient {
             registerWorker.join();//main 会等register结束后再启动心跳线程
 
             heartbeatWorker.start();
+            this.cachedServiceRegistry.initialize();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,6 +55,7 @@ public class RegisterClient {
     public void shutdown() {
         this.isRunning = false;
         this.heartbeatWorker.interrupt();
+        this.cachedServiceRegistry.destroy();
     }
 
     private class HeartbeatWorker extends Thread {
@@ -85,6 +90,10 @@ public class RegisterClient {
             RegisterResponse response = httpSender.register(request);
             System.out.println("Register result: " + response.getStatus());
         }
+    }
+
+    public Boolean isRunning() {
+        return isRunning;
     }
 
 }
