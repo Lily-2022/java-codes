@@ -30,6 +30,10 @@ public class HttpSender {
         return response;
     }
 
+    public void unregister(String serviceName, String serviceInstanceId) {
+        System.out.println("instance[" + serviceName + ", " + serviceInstanceId +"]");
+    }
+
     public Map<String, Map<String, ServiceInstance>> fetchServiceRegistry() {
         Map<String, Map<String, ServiceInstance>> registry = new HashMap<String, Map<String, ServiceInstance>>();
         ServiceInstance serviceInstance = new ServiceInstance();

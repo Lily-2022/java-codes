@@ -3,6 +3,7 @@ package register.server;
 public class RegisterServerController {
 
     private Registry registry = Registry.getInstance();
+    private PeersReplicator peersReplicator = PeersReplicator.getInstance();
 
     public RegisterResponse register(RegisterRequest request) {
         RegisterResponse response = new RegisterResponse();
@@ -31,12 +32,28 @@ public class RegisterServerController {
             ServiceInstance serviceInstance = registry.getServiceInstance(request.getServiceName(), request.getServiceInstanceId());
             serviceInstance.renew();
 
+            HeartbeatMessuredRate heartbeatMessuredRate = new HeartbeatMessuredRate();
+            heartbeatMessuredRate.increment();
+
+            peersReplicator.replicateHeartbeat(request);
+
             response.setStatus(HeartbeatResponse.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HeartbeatResponse.FAILURE);
         }
         return response;
+    }
+
+    public void cancel(CancelRequest request) {
+        registry.remove(request.getServiceName(), request.getServiceInstanceId());
+        peersReplicator.replicateCancel(request);
+    }
+
+    public void replicateBatch(PeersReplicateBatch batch) {
+        for (Request request : batch.getRequests()) {
+
+        }
     }
 
 }

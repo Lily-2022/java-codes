@@ -56,6 +56,7 @@ public class RegisterClient {
         this.isRunning = false;
         this.heartbeatWorker.interrupt();
         this.cachedServiceRegistry.destroy();
+        this.httpSender.unregister(SERVICE_NAME, serviceInstanceId);
     }
 
     private class HeartbeatWorker extends Thread {
