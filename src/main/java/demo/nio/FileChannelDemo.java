@@ -14,6 +14,7 @@ public class FileChannelDemo {
         FileChannel fileChannel = fileOutputStream.getChannel();
         ByteBuffer buffer = ByteBuffer.wrap("hello java".getBytes());
         fileChannel.write(buffer);
+        fileChannel.force(true);
         fileChannel.close();
         fileOutputStream.close();
 
